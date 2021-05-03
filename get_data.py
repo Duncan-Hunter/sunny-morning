@@ -7,6 +7,8 @@ def main():
     directory = os.path.dirname(os.path.realpath(__file__))
     with open(f"{directory}/api_key.yaml", "r") as yaml_file:
         yaml_data = yaml.load(yaml_file)
+    if not os.path.isdir(f"{directory}/data"):
+        os.mkdir(f"{directory}/data")
     api_key = yaml_data["api_key"]
     cities = yaml_data["city_ids"]
     for city_id in cities:
@@ -24,6 +26,7 @@ def main():
         write_data["weather_id"] = data["weather"][0]["id"]
         sunrise = datetime.fromtimestamp(data["sys"]['sunrise'])
         write_data["sunrise"] = sunrise.strftime(save_format)
+        
         with open(f"{directory}/data/{save_now}.yaml", 'w') as file:
             yaml.dump(write_data, file)
 
